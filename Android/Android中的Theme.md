@@ -1,4 +1,4 @@
-#Androdi中的Theme
+# Androdi中的Theme
 在AndroidManifest.xml文件中有
 ````
 android:theme="@style/AppTheme"
