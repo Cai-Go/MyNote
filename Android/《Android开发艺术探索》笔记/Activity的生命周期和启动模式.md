@@ -24,7 +24,7 @@
 #### 异常情况下的生命周期(指Activity被系统回收或者由于设备的Configuration发生改变从而导致Activitu被销毁重建)
 ---
 
- 资源相关的系统配置发生改变导致Activity被杀死并重新创建。
+- 资源相关的系统配置发生改变导致Activity被杀死并重新创建。
  >默认情况下，如果Activity不做特殊处理，当系统配置发生改变后，Activity就好被销毁并重新创建，其生命周期如下。
 ![异常情况下Activity的重建过程](http://7xq2jk.com1.z0.glb.clouddn.com/%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8BActivity%E7%9A%84%E9%87%8D%E5%BB%BA%E8%BF%87%E7%A8%8B.png)
  onSaveInstanceState方法只会在Activity被异常终止的情况下调用，调用时机是在onStop之前，但和onPause没有既定的时序关系，可能在onPause之前调用，也可能在onPause之后调用。当Activity被重新创建后，系统会调用onRestoreInstanceState,并且把Activity销毁时onSaveInstanceState方法所保存的Bundle对象作为参数同时传递给onRestoreInstanceState和onCreate方法。onRestoreInstanceState方法在onStart方法之后调用。
