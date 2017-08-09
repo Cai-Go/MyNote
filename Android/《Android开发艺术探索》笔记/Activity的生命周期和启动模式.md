@@ -1,5 +1,6 @@
 # Activity的生命周期和启动模式
 ## Activity的生命周期
+
 #### 典型情况下的生命周期(指在有用户参与的情况下，Activity所经过的生命周期的改变)。
 ---
 - onCreate:表示Activity正在被创建，是生命周期的第一个方法。这个方法里可以做一些初始化工作。
@@ -19,16 +20,15 @@
 - 当按Back键回退时，回调如下:onPause→onStop→onDestory。
 - 当Activity被系统回收后再次打开，生命周期方法回调过程和正常一样，但只是生命周期方法一样，不代表所有过程都一样。
 - 从整个生命周期来说，onCreate和onDestroy是配对的，分别标志着Actovity的创建和销毁，并且只可能有一次调用。从Activity是否可见来说，onStart和onStop是配对的，随着用户的操作或者设备屏幕的点亮和熄灭，这两个方法可能被调用多次；从Activity是否在前台来说，onResume和onPause是配对的，随着用户的操作或者设备屏幕的点亮和熄灭，这两个方法可能被调用多次。
-- 当启动一个新的Activity的时候，旧Activity的onPause会先执行，然后才会启动新的Activity。
-- 应当尽量在onStop中做操作，从而使得新Activity尽快显示出来并切换到前台。
 
 #### 异常情况下的生命周期(指Activity被系统回收或者由于设备的Configuration发生改变从而导致Activitu被销毁重建)
 ---
-- 资源相关的系统配置发生改变导致Activity被杀死并重新创建。
->默认情况下，如果Activity不做特殊处理，当系统配置发生改变后，Activity就好被销毁并重新创建，其生命周期如下。
+
+ 资源相关的系统配置发生改变导致Activity被杀死并重新创建。
+ >默认情况下，如果Activity不做特殊处理，当系统配置发生改变后，Activity就好被销毁并重新创建，其生命周期如下。
 ![异常情况下Activity的重建过程](http://7xq2jk.com1.z0.glb.clouddn.com/%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8BActivity%E7%9A%84%E9%87%8D%E5%BB%BA%E8%BF%87%E7%A8%8B.png)
-onSaveInstanceState方法只会在Activity被异常终止的情况下调用，调用时机是在onStop之前，但和onPause没有既定的时序关系，可能在onPause之前调用，也可能在onPause之后调用。当Activity被重新创建后，系统会调用onRestoreInstanceState,并且把Activity销毁时onSaveInstanceState方法所保存的Bundle对象作为参数同时传递给onRestoreInstanceState和onCreate方法。onRestoreInstanceState方法在onStart方法之后调用。
-    - 关于保存和恢复View层次结构，系统工作的流程是：
+ onSaveInstanceState方法只会在Activity被异常终止的情况下调用，调用时机是在onStop之前，但和onPause没有既定的时序关系，可能在onPause之前调用，也可能在onPause之后调用。当Activity被重新创建后，系统会调用onRestoreInstanceState,并且把Activity销毁时onSaveInstanceState方法所保存的Bundle对象作为参数同时传递给onRestoreInstanceState和onCreate方法。onRestoreInstanceState方法在onStart方法之后调用。
+     - 关于保存和恢复View层次结构，系统工作的流程是：
         + 首先Activity被意外终止时，Activity会调用onSaveInstanceState去保存数据
         + 然后Activity会委托Window去保存数据
         + 接着Window在委托它上面的顶级容器去保存数据，顶级容器是一个ViewGroup，一般来说很可能是一个DecorView
