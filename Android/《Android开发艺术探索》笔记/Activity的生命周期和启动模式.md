@@ -66,3 +66,168 @@ screenSize和smallestScreenSize两个比较特殊，它们的行为和编译选�
     - singleTask: 栈内复用模式。是一种单实例模式，只要Activity在一个栈中存在，即使多次启动Activity都不会重建实例，系统也会回调其onNewIntent方法。另外，singleTask模式的Activity切换到栈顶会导致它之上的栈内的Activity出栈。
     ![singleTask示例](http://7xq2jk.com1.z0.glb.clouddn.com/singleTask.png)
     - singleInstance: 单实例模式。是一种加强的singleTask模式，具有此种模式的Activity只能单独位于一个任务栈中，并且由于栈内复用的特性，后续的请求均不会创建新的Activity，除非任务栈被系统销毁。
+2. Activity所需任务栈。
+    首先从**TaskAffinity**这个参数说起，这个参数标识了一个Activity所需要的任务栈的名字，默认情况下，所有的Activity都单独指定TaskAffinity属性，这个属性值必须不能和包名相同，否则就相当于没有指定。TaskAffinity属性主要和singletTask启动模式或者allowTaskReparenting属性配对使用。另外任务栈分为前台任务栈和后台任务栈，后台任务栈中的Activity位于暂停状态。
+    当TaskAffinity和singletTask启动模式配对使用的时候，是具有该模式的Activity的目前任务栈的名字，待启动的Activity会运行在名字和TaskAffinity相同的任务栈中。
+    当TaskAffinity和allowTaskReparenting结合的时候，会产生特殊的效果。当一个应用A启动了应用B的某个Activity后，如果这个Activity的allowTaskReparenting属性为true的话，那个当应用B被启动后，此Activity会直接从应用A的任务栈转移到应用B的任务栈中。
+3. Activity指定启动模式的方法。
+    
+    - 第一种是通过AndroidManifest为Activity指定启动模式。
+    ````java
+        <activity 
+            android:name="com.ryg.chapter_1.SecondActivity"
+            android:configChanges="screenLayout"
+            android:launchMode="singleTask"
+            android:label="@string/app_name"/>
+    ````
+    - 第二种是通过在Intent中设置标志位来为Activity指定启动模式。
+    ````java
+        Intent intent = new Intent();
+        intent.setClass(ManiActivity.this,SecondActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    ````
+    区别：
+        - 首先，优先级上第二种方式要高于第一种。当两种同时存在时，以第二种方式为准。
+        - 其次，两种方式在限定范围上有所不同，第一种方式无法直接为Activity设定FLAG_ACTIVITY_CLEAR_TOP标识，第二种方式无法为Activity指定singleInstance模式。
+    >Tips:
+        singleTask模式的Activity切换到栈顶会导致在它之上的栈内的Activity出栈。
+
+4. Activity的Flags
+
+    - FLAG_ACTIVITY_NEW_TASK
+      >这个标记位的作用是为Activity我都指定“singleTask”启动模式，其效果和在XML中指定该启动模式相同。
+    - FLAG_ACTIVITY_SINGLE_TOP
+      >这个标记的作用是为Activity指定“singleTop”启动模式，其效果和在XML中指定该启动模式相同。
+    - FLAG_ACTIVITY_CLEAR_TOP
+      >具有此标记位的Activity,当它启动时，在同一个任务栈中所有位于它上面的Activity都要出栈。这个模式一般需要和FLAG_ACTIVITY_NEW_TASK配合使用，在这种情况下，被启动的Activity的实例如果存在，那么系统就会调用它的onNewIntent；如果被启动的Activity采用standard模式启动，那么它连同它之上的Activity都要出栈，系统会创建新的Activity实例并放入栈顶，
+    - FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+      >具有这个标记的Activity不会出现在历史的Activity的列表中，当某些情况下，我们不希望用户通过历史列表回到我们的Activity的时候这个标记比较有用，等同于XML中指定Activity的属性android:excludeFromRecents="true"。
+
+## IntentFilter的匹配规则
+1. Activity的启动分为两种
+    
+    - 显示调用
+    - 隐式调用
+    显示调用需要明确地指定被启动对象的组件信息，包括包名和类名；隐式调用则不需要明确地指定组件信息。原则上一个Intent不应该即时显示调用又是隐式调用，如果二者共存的话以显示调用为主。
+    IntentFilter中的过滤信息有action,category,data。
+    下面是一个过滤规则：
+    ````java
+    <activity
+    android:name="com.ryg.chapter_1.ThirdActivity"
+    android:configChanges="screenLayout"
+    android:label="@string/app_name"
+    android:launchMode="singleTask"
+    android:taskAffinity="com.ryg.task1" >
+        <intent-filter>
+            <action android:name="com.ryg.charpter_1.c" />
+            <action android:name="com.ryg.charpter_1.d" />
+            <category android:name="com.ryg.category.c" />
+            <category android:name="com.ryg.category.d" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="text/plain" />
+            </intent-filter>
+    </activity>
+    ````
+
+2. 只有一个Intent同时匹配action类别，category类别，data类别才算是完全匹配，只有完全匹配才能成功启动目标Activity。另外，一个Activity中可以有多个intent-filter，一个Intent只要能匹配任何一组intent-filter即可成功启动对应的Activity。
+3. 匹配规则。
+    
+    - action匹配规则：
+        只要Intent中的action能够和过滤规则中的任何一个action相同即可匹配成功，action匹配区分大小写。
+        一个过滤规则中可以有多个action,那么只要Intent中的action能够和过滤规则中的任何一个action相同即可匹配成功。
+        action的匹配要求Intent中的action存在且必须和过滤规则中的其中一个action相同。
+    - category匹配规则：
+        Intent中如果有category那么所有的category都必须和过滤规则中的其中一个category相同，如果没有category的话那么就是默认的category，即android.intent.category.DEFAULT，所以为了Activity能够接收隐式调用，配置多个category的时候必须加上默认的category。
+        也就是说，Intent中出现了category，不管有几个category，对于每个category来说，它必须是过滤规则中已经定义了的category。当然，Intent也可以没有actegory，因为系统在用startActivity或者startActivityForResult的时候会默认为Intent加上"android.intent.category.DEFAULT"这个category。
+    - data匹配规则：
+        Intent中必须含有data数据，并且data数据能够完全匹配过滤规则中的某一个data。
+        data的结构很复杂，语法大致如下：
+        ````java
+        <data   android:scheme="string"
+                android:host="string"
+                android:port="string"
+                android:path="string"
+                android:pathPattern="string"
+                android:pathPrefix="string"
+                android:mimeType="string" />
+
+        ````
+        主要由mimeType和URI组成，其中mimeType代表媒体类型，如image/jpeg、audio/mpeg4-generic和video、*等，可以表示图片、文本、视频等不同的媒体格式；而URI的结构也复杂，大致如下：
+        ````
+            <scheme>://<host>:<port>/[<path>]|[<pathPrefix>]|[pathPattern]
+        ````
+        例如：
+        ````
+            content://com.example.project:200/folder/subfolder/etc
+            http://www.baidu.com:80/search/info
+        ````
+        scheme:URI的模式，比如http、file、content等。
+        host:URI的主机名，比如www.baidu.com.
+        port:URI的端口号，比如80.
+        其中如果scheme或者host未指定那么URI就无效。
+        path、pathPattern、pathPrefix都是表示路径信息，其中path表示完整的路径信息，pathPrefix表示路径的前缀信息；pathPattern表示完整的路径，但是它里面包含了通配符"*",表示0个或者多个任意字符。
+        **data匹配规则的几种情况：**
+        1.
+            ````java
+            //URI有默认值
+            <intent-filter>
+                <data android:mimeType="image/*"/>
+                ...
+            </intent-filter>
+            ````
+        如果过滤规则中的mimeType指定为"image/*"或者"text/*"等这种类型的话，那么即使过滤规则中没有指定URI，URI有默认的scheme是content和file！如果过滤规则中指定了scheme的话那就不是默认的scheme了。
+        例：
+        ````
+        intent.setDataAndType(Uri.parse("file://abc"),"image/png");
+        ````
+        如果要为Intent指定完整的data，必须要调用setDataAndType方法！
+        不能先调用setData然后调用setType，因为这两个方法会彼此清除对方的值。
+        ````java
+            public Intent setData(Uri data){
+                mData= data;
+                mType = null;
+                return this;
+            }    
+        ````
+        可以发现，setData会把mimeType置为null,setType也会把URI置为null。
+        2.
+        ````java
+            <intent-filter>
+                <data android:mimeType="video/mpeg" android:scheme="http/..."/>
+                <data android:mimeType="audio/mpeg" android:scheme="http/..."/>
+            </intent-filter>
+        ````
+        这种规则指定了两组data规则，且每个data都指定了完整的属性值，既有URI又有mimeType。
+        例：
+        ````java
+            intnet.setDataAndType(Uri.parse("http://abc"),"video/mpeg");
+        ````
+        或
+        ````java
+            intnet.setDataAndType(Uri.parse("http://abc"),"audio/mpeg");
+        ````
+        另外，data的下面两种写法作用是一样的：
+        ````java
+        <intent-filter>
+            <data android:scheme="file" android:host="www.github.com"/>
+        </intent-filter>
+        <intent-filter>
+            <data android:scheme="file"/>
+            <data android:host="www.github.com"/>
+        </intent-filter>
+        ````
+        Intent-filter的匹配规则对于Service和BroadcastReceiver也同样道理，不过系统对于Service的建议是尽量使用显示调用方式来启动服务。
+        **如何判断是否有Activity能够匹配我们的隐式Intent？**
+          - PackageManager的resolveActivity方法或者Intent的resolveActivity方法：如果找不到就会返回null
+          - PackageManager的queryIntentActivities方法：它返回所有成功匹配的Activity信息。
+          针对Service和BroadcastReceiver等组件，PackageManager同样提供了类似的方法去获取成功匹配的组件信息，例如queryIntentServices、queryBroadcastReceivers等方法。有一类action和category比较重要，它们在一起用来标明这是一个入口Activity，并且会出现在系统的应用列表中。
+          在action和category中，有一类action和category比较重要。
+          ````
+            <action android:name="android.intent.action.MAIN"/>
+            <action android:name="android.intent.category.LAUNCHER"/>
+          ````
+          这二者共同作用是用来标明这是一个入口Activity并且会出现在系统的应用列表中，缺一不可。
+
+                                                                    2017/8/13
+                                                                    W.Z.H
