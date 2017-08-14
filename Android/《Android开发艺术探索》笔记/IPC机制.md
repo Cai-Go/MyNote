@@ -162,4 +162,63 @@ serialVersionUID 的工作机制：
     ````
 
 ## Android中的IPC方式
-1. 
+1. 文件共享适合在对数据同步要求不高的进程之间进行通信，并且要妥善处理并发读/写的问题。
+2. 不建议在进程间通信中使用 SharePreferences，因为由于系统对它的读/写有一定的缓存策略，即在内存中会有一份 SharePreferences 文件的缓存，因此在多进程模式下，系统对它的读/写就变得不可靠，当面对高并发的读/写访问，SharePreferences 有很大几率会丢失数据。
+3. Messenger 可以在不同进程中传递 Message 对象，它的底层实现是 AIDL。
+4. Messenger 的工作原理
+    ![Messenger 的工作原理](http://7xq2jk.com1.z0.glb.clouddn.com/Messenger%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png)
+5.AIDL 文件支持的数据类型
+
+    - 基本数据类型（int、long、char、boolean、double等）;
+    - String 和 CharSequence;
+    - List：只支持 ArrayList,里面每个元素都必须能够被 AIDL 支持;
+    - Map: 只支持 HashMap，里面的每个元素都必须被 AIDL 支持，包括 key 和 value;
+    - Parcelable：所有实现了 Parcelable 接口的对象;
+    - AIDL：所有 AIDL 接口本身也可以在 AIDL 文件中使用。
+
+6. AIDL 中除了基本数据类型，其他类型的参数必须标上方向：in、out或者inout, in 表示输入型参数，out 表示输出型参数，inout 表示输入输出型参数。
+7. RemoteCallbackList 是系统专门提供的用于删除跨进程 listener 的接口，是一个泛型，支持管理任意的 AIDL 接口。工作原理是在它的内部有一个 Map 结构专门用来保存所有的 AIDL 回调，这个 Map 的 key 是 IBinder 类型，value 是 Callback 类型。
+8. Binder 意外死亡后重新连接服务。
+    
+    - 给 Binder 设置 DeathRecipient 监听，当 Binder 死亡时，会收到 binderDied 方法的回调，在 binderDied 方法中可以重连远程服务。
+    - 在 onServiceDisconnected 中重连远程服务。
+    区别在于：onServiceDisconnected 在客户端的 UI 线程中被回调，而 binderDied 在客户端的 Binder 线程池中被回调。
+
+9. 如何在 AIDL 中进行权限验证。
+
+    - 可以在 onBind 中进行验证，验证不通过就直接返回 null。验证方式比如使用 permission 验证，在 AndroidMenifest 中声明所需的权限
+    ````java
+        <permission 
+            android:name="com.ryg.chapter_2.permission.ACCESS_BOOK_SERVICE"
+            android:protectionLevel="normal"/>
+    ````
+    如果是自己内部的应用想绑定到我们的服务中，只需要在它的 AndroidMenifest 文件中采用如下方式使用 permission :
+    ````java
+        <uses-permission android:name="com.ryg.chapter_2.permission.ACCESS_BOOK_SERVICE"/>
+    ````
+    - 可以在服务端的 onTransact 方法中进行权限验证，如果验证失败就直接返回false,这样服务端就不会终止执行 AIDL 中的方法从而达到保护服务端的效果。
+
+10. ContentProvider 的六个抽象方法：
+    
+    - onCreate：代表 ContentProvider 的创建，做一些初始化操作。
+    - query：查找。
+    - update：更新。
+    - insert：插入。
+    - delete：删除。
+    - getType：用来返回一个 Uri 请求所对应的 MIME 类型(媒体类型)，比如图片、视频等，如果不关心可以直接在方法中返回 null 或者 "\*/\*"。
+    onCreate 由系统回调并运行在主线程里，其他五个方法均由外界回调并运行在 Binder 线程池中。
+
+11. ContentProvider 的权限可以细分为读权限和写权限，分别对应 android:readPermission 和 android:writePermission 属性，如果分别声明了读权限和写权限，那么外界应用也必须依次声明相应的权限才可以进行读/写操作，否则外界应用会异常终止。
+12. android:authorities 是 ContentProvider 的唯一标识，通过这个属性外部应用就可以访问。
+
+## Binder 连接池
+1. Binder 连接池的工作原理
+    ![Binder连接池的工作原理](http://o8fk8z4sl.bkt.clouddn.com/Binder%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png)
+
+## 选择合适的IPC方式
+1. IPC 方式的优缺点和适用场景
+![IPC 方式的优缺点和适用场景](http://o8fk8z4sl.bkt.clouddn.com/IPC%E6%96%B9%E5%BC%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%E5%92%8C%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF.png)
+ 
+
+                                                                2017.8.15
+                                                                  W.Z.H
