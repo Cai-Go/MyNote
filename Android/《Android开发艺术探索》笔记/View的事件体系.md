@@ -38,7 +38,7 @@
     
     getX/getY 返回的是相对于当前 View 左上角的 x 和 y 坐标，getRawX/getRawY 返回的是相对于手机屏幕左上角的 x 和 y 坐标。
 
-4. TouchSlop 是系统所能识别出的被认为是滑动的最小的距离，这是一个常量，和设备有关，可以通过**ViewConfiguration.get(getContext()).getScaledTouchSlop()**来获取这个常量。
+4. TouchSlop 是系统所能识别出的被认为是滑动的最小的距离，这是一个常量，和设备有关，可以通过 **ViewConfiguration.get(getContext()).getScaledTouchSlop()** 来获取这个常量。
 
 5. VelocityTracker
     速度追踪，用于追踪手指在滑动过程中的速度，包括水平和竖直方向的速度。
