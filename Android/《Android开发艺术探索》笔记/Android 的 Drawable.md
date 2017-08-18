@@ -38,7 +38,7 @@
 
     - android:shape
         表示图形的形状，有四个选项：rectangle(矩形)、oval(椭圆)、line(横线)和 ring(圆环)。
-        ring的属性值
+        ring的属性值：
         ![ring的属性值](http://o8fk8z4sl.bkt.clouddn.com/ring%E7%9A%84%E5%B1%9E%E6%80%A7%E5%80%BC.png)
     - <corners\>
         表示 shape 的四个角度，只适用于矩形 shape，有如下五个属性
