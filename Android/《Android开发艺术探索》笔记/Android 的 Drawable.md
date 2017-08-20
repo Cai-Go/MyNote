@@ -82,3 +82,40 @@
 3. LayerDrawable
     LayerDrawable 对应于 XML 标签是<layer-list\>，表示一种层次化的 Drawable 集合，通过将不同的 Drawable 放置在不同的层上面从而达到一种叠加后的效果。
     默认情况下，layer-list 中的所有的 Drawable 都会被缩放至 View 的大小，对于 bitmap 来说，需要使用 android:gravity 属性才能控制图片的显示效果。
+
+4. StateListDrawable
+    StateListDrawable 对应于 <selector> 标签，也是 Drawable 集合，主要用于设置可单击的 View 的背景。
+    属性的含义：
+
+    - android:constantSize
+        StateListDrawable 的固定大小是否不随着其状态的改变而改变。
+    - android:dither
+        是否开启抖动效果。
+    - android:variablePadding
+        StateListDrawable 的 padding 表示是否随着其状态的改变而改变。
+
+    View 的常见状态
+    ![View 的常见状态](http://o8fk8z4sl.bkt.clouddn.com/View%E7%9A%84%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81.png)
+
+5. LevelListDrawable
+    LevelListDrawable 对应于 <level-list> 标签，也表示一个 Drawable 集合，集合中的每个 Drawable 都有 一个等级的概念，由 **android:minLevel** 和 **android:maxLevel** 来指定，在最小值和最大值之间的等级会对应此 item 中的 Drawable，Drawable 的等级范围是0~1000,最小等级是0，最大等级是10000。
+
+6. TransitionDrawable
+    TransitionDrawable 对应于 <transition> 标签，用于实现两个 Drawable 之间的淡入淡出效果。
+
+7. InsetDrawable
+   InsetDrawable 对应于 <inset> 标签，可以将其他 Drawable 内嵌到自己当中，并可以在四周留出一定的间距。
+
+8. ScaleDrawable
+    ScaleDrawable 对应于 <scale> 标签，可以根据自己的等级将指定的 Drawable 缩放到一定的比例。
+    如果 ScaleDrawable 的级别越大那么内部的 Drawable 看起来就越小，如果 ScaleDrawable 的 XML 中所定义的缩放比例越大，那么内部的 Drawable 看起来就越小。ScaleDrawable 的作用更偏向于缩小一个特定的 Drawable。
+
+9. ClipDrawable
+    ScaleDrawable 对应于 <clip> 标签，可以根据自己当前的等级来裁剪另一个 Drawable。
+
+    ClipDrawable 的 gravity 属性
+    ![ClipDrawable的gravity属性](http://o8fk8z4sl.bkt.clouddn.com/ClipDrawable%20%E7%9A%84%20gravity%20%E5%B1%9E%E6%80%A7.png)
+
+
+                                                        2017.8.20
+                                                          W.Z.H
