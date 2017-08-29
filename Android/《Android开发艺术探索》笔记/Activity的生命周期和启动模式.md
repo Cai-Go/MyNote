@@ -33,7 +33,7 @@
         + 然后Activity会委托Window去保存数据
         + 接着Window在委托它上面的顶级容器去保存数据，顶级容器是一个ViewGroup，一般来说很可能是一个DecorView
         + 最后顶层容器再去一一通知它的子元素来保存数据
-    - 接收的位置选择onRestoreInstanceState或onCreate的区别：
+    - 接收的位置选择onRestoreInstanceState或onCreate的区别
      >onRestoreInstanceState一旦被调用，其参数Bundle savedInstanceState一定是有价值的，不需要额外地判断是否为空；但是onCreate不行吗，onCreate如果正常启动的话，其参数Bundle savedInstanceState为null,所以必须额外判断。通时官方建议建议使用onRestoreInstanceState去恢复数据。
     - 针对onSaveInstanceState方法，需要说明的是系统只会在Activity即将被销毁并且有机会重新显示的情况下才会回去调用。
     
