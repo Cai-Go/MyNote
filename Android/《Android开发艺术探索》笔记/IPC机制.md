@@ -25,29 +25,29 @@
 
 ## IPC基础概念介绍
 1. Serializable 是 Java 提供的一个序列化接口，是一个空接口，为对象提供标准的序列化和反序列化操作。
-    ````java
-        public class User implements Serializable{
-            private static final long serialVersionUID = 519061723721295573l;
+````java
+    public class User implements Serializable{
+        private static final long serialVersionUID = 519061723721295573l;
 
-            public int userId;
-            public String userName;
-            public boolean isMale;
-            ...
-        }
-    ```` 
+        public int userId;
+        public String userName;
+        public boolean isMale;
+        ...
+    }
+```` 
 只需要采用 ObjectOutputStream 和 ObjectInputStream 即可实现对象的序列化和反序列化。
-    ````java
-        //序列化过程
-        User user = new User(0,"jake",true);
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("cache.txt"));
-        out.writeObject(user);
-        out.close();
+````java
+    //序列化过程
+    User user = new User(0,"jake",true);
+    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("cache.txt"));
+    out.writeObject(user);
+    out.close();
 
-        //反序列化过程
-        ObjectInputStream int= new ObjectInputStream(new FileInputStream("cache.txt"));
-        User newUser = in.readObject();
-        in.close();
-    ````
+    //反序列化过程
+    ObjectInputStream int= new ObjectInputStream(new FileInputStream("cache.txt"));
+    User newUser = in.readObject();
+    in.close();
+````
 2. serialVersionUID 是用来辅助序列化和反序列化过程的，原则上序列化后的数据中的 serialVersionUID 只有和当前类的 serialVersionUID 相同才能够正常地被反序列化。
 serialVersionUID 的工作机制：
 > 序列化的时候系统会把当前类的 serialVersionUID 写入序列化的文件中(也可能是其他中介)，当反序列化的时候系统就会去检测文件中的 serialVersionUID，看它是否和当前类的 serialVersionUID 一致，如果一致就说明序列化的类的版本和当前类的版本是相同的，这个时候可以成功反序列化；否则就说明当前类和序列化的类相比发生了某些变化，比如成员变量的数量、类型可能发生了改变，这个时候是无法正常反序列化的。
