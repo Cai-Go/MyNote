@@ -28,13 +28,15 @@
  >默认情况下，如果Activity不做特殊处理，当系统配置发生改变后，Activity就好被销毁并重新创建，其生命周期如下。
 ![异常情况下Activity的重建过程](http://7xq2jk.com1.z0.glb.clouddn.com/%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8BActivity%E7%9A%84%E9%87%8D%E5%BB%BA%E8%BF%87%E7%A8%8B.png)
  onSaveInstanceState方法只会在Activity被异常终止的情况下调用，调用时机是在onStop之前，但和onPause没有既定的时序关系，可能在onPause之前调用，也可能在onPause之后调用。当Activity被重新创建后，系统会调用onRestoreInstanceState,并且把Activity销毁时onSaveInstanceState方法所保存的Bundle对象作为参数同时传递给onRestoreInstanceState和onCreate方法。onRestoreInstanceState方法在onStart方法之后调用。
-     - 关于保存和恢复View层次结构，系统工作的流程是：
+
+    - 关于保存和恢复View层次结构，系统工作的流程是：
         + 首先Activity被意外终止时，Activity会调用onSaveInstanceState去保存数据
         + 然后Activity会委托Window去保存数据
         + 接着Window在委托它上面的顶级容器去保存数据，顶级容器是一个ViewGroup，一般来说很可能是一个DecorView
         + 最后顶层容器再去一一通知它的子元素来保存数据
-    - 接收的位置选择onRestoreInstanceState或onCreate的区别
-     >onRestoreInstanceState一旦被调用，其参数Bundle savedInstanceState一定是有价值的，不需要额外地判断是否为空；但是onCreate不行吗，onCreate如果正常启动的话，其参数Bundle savedInstanceState为null,所以必须额外判断。通时官方建议建议使用onRestoreInstanceState去恢复数据。
+    - 接收的位置选择onRestoreInstanceState或onCreate的区别：
+    
+        >onRestoreInstanceState一旦被调用，其参数Bundle savedInstanceState一定是有价值的，不需要额外地判断是否为空；但是onCreate不行吗，onCreate如果正常启动的话，其参数Bundle savedInstanceState为null,所以必须额外判断。通时官方建议建议使用onRestoreInstanceState去恢复数据。
     - 针对onSaveInstanceState方法，需要说明的是系统只会在Activity即将被销毁并且有机会重新显示的情况下才会回去调用。
     
 - 资源内存不足导致低优先级的Activity被杀死。
