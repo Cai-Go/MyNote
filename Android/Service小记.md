@@ -1,5 +1,5 @@
----
-# 先来扯点
+# Service 小记
+## 先来扯点
 Service作为Android四大组件之一,相信学过Android的都知道这货,它在每一个应用程序中都扮演着重要的角色.
 Service是一个可以在后台执行长时间运行操作而不使用用户界面的应用组件.Service可由其他应用组件启动,而且即使用户切换到其他应用,Service仍将在后台继续运行.Service主要用于在后台处理一些耗时的逻辑,或者去执行某些需要长期运行的任务.必要的时候我们甚至可以在程序退出的情况下,让Service在后台继续保持运行状态.
 Service和Activity很相似,但是区别在于:Service一直在后台运行,没有用户界面,所以不会到前台,如果Service被启动起来,就和Activity一样,具有自己的声明周期.
@@ -8,7 +8,7 @@ Service和Activity很相似,但是区别在于:Service一直在后台运行,没�
 
 另外,需要注意的是,Service和Thread不是一个意思,不要被Service的后台概念所迷惑.实际上Service并不会自动开启线程,所有的代码都是默认运行在主线程中的.因此,我们需要在Service的内部手动创建子线程,并在这里执行具体的任务,否则可能造成ANR的问题.
 
-# Service的形式
+## Service的形式
 Service基本上分为两种形式:
 
 - Started(启动的)
@@ -16,8 +16,8 @@ Service基本上分为两种形式:
 - Bound(绑定的)
     + 当应用组件通过调用 bindService() 绑定到Service时,Service即处于“绑定”状态.一个绑定的Service提供客户端/服务器接口允许组件和Service交互,甚至跨进程操作使用进行间通信（IPC）.仅当与另一个应用组件绑定时,绑定服务才会运行.多个组件可以同时绑定到该服务,但全部取消绑定后,该服务即会被销毁.
 
-# Service的使用
-## 几个方法
+## Service的使用
+### 几个方法
 想要创建一个service,你必须创建一个Service的子类（或一个它的存在的子类）.在你的实现中,你需要重写一些回调方法来处理Service生命周期的关键方面并且对于组件绑定到Service提供一个机制.应重写的最重要的回调方法包括:
 
 - onStartCommand()
@@ -32,9 +32,9 @@ Service基本上分为两种形式:
 
 >如果希望在Service组件做某些事情,那么只要在onCreate()或onStratCommand()方法中定义相关业务代码即可.而当服务销毁时,我们应该在onDestroy()方法中去回收那些不再使用的资源.
 
-## 使用清单文件声明服务
+### 使用清单文件声明服务
 如同 Activity（以及其他组件）一样,您必须在应用的清单文件中声明所有服务.
-````
+````java
 <manifest ... >
   ...
   <application ... >
@@ -44,10 +44,10 @@ Service基本上分为两种形式:
 </manifest>
 ````
 
-## 创建启动Service
+### 创建启动Service
 直接用代码了,比较清楚.
 
-````
+````java
   @Override  
     public void onCreate() {  
         super.onCreate();  
@@ -72,7 +72,7 @@ Service基本上分为两种形式:
     }  
 ````
 然后在activity_main中添加2个按钮.
-````
+````java
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     android:layout_width="match_parent"  
     android:layout_height="match_parent"  
@@ -94,7 +94,7 @@ Service基本上分为两种形式:
 ````
 
 接着在MainActivity中添加以下代码.
-````
+````java
 public class MainActivity extends Activity implements OnClickListener {  
     private Button startService;  
     private Button stopService;  
@@ -127,7 +127,7 @@ public class MainActivity extends Activity implements OnClickListener {
 }  
 ````
 最后在AndroidManifest.xml中注册.
-````
+````java
     <service android:name="com.example.servicetest.MyService" >  </service>  
 ````
 
@@ -147,11 +147,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 >注:在MyService的任何一个位置调用stopSelf()方法就能让Service自己停下来
 
-## Service和Activity通信
+### Service和Activity通信
 接下来,我们让Service和Activity的关系更紧密一些,来实现在Activity中指挥Service去干活.而这需要借助onBind()方法.
 还是看代码吧.
 修改MyService里面的代码:
-````
+````java
 ...
 private MyBinder mBinder = new MyBinder();
 ...
@@ -186,7 +186,7 @@ private MyBinder mBinder = new MyBinder();
         />
 ````
 修改MainActivity的代码:
-````
+````java
  public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button start, stop;
@@ -263,12 +263,12 @@ private MyBinder mBinder = new MyBinder();
 
 >注:任何一个Service在整个应用程序范围内都是通用的,即MyService不仅可以和MainActivity建立关联,还可以和任何一个Activity建立关联,而且在建立关联时它们都可以获取到相同的MyBinder实例.
 
-## 销毁Service的方法
+### 销毁Service的方法
 根据之前的测试,我们知道,点击STARTSERVICE按钮启动Service,再点击STOPSERVICE按钮停止Service,这样MyService就被销毁了.
 如果我们是点击的Bind Service按钮呢？由于在绑定Service的时候指定的标志位是BIND_AUTO_CREATE,说明点击BindService按钮的时候Service也会被创建,这时应该呢？其实也很简单,点击一下UnbindService按钮,将Activity和Service的关联解除,从而销毁Service.
 如果我们既点击了StartService按钮,又点击了BindService按钮,这个时候你会发现,不管你是单独点击Stop Service按钮还是Unbind Service按钮,Service都不会被销毁,必要将两个按钮都点击一下,Service才会被销毁.也就是说,点击StopService按钮只会让Service停止,点击Unbind Service按钮只会让Service和Activity解除关联,一个Service必须要在既没有和任何Activity关联又处理停止状态的时候才会被销毁.
 我们测试下.
-````
+````java
 public void onClick(View v) {  
     switch (v.getId()) {  
     case R.id.start_service:  
@@ -299,7 +299,7 @@ public void onClick(View v) {
 
 >注:根据Android系统的机制,一个服务只要被启动或者被绑定之后,就会一直处于运行状态
 
-## Service的生命周期
+### Service的生命周期
 服务的生命周期比 Activity 的生命周期要简单得多.但是,密切关注如何创建和销毁服务反而更加重要,因为服务可以在用户没有意识到的情况下运行于后台.
 服务生命周期（从创建到销毁）可以遵循两条不同的路径:
 
@@ -311,7 +311,7 @@ public void onClick(View v) {
 ### 实现生命周期回调
 与 Activity 类似,服务也拥有生命周期回调方法,您可以实现这些方法来监控服务状态的变化并适时执行工作.
 看代码:
-````
+````java
 public class ExampleService extends Service {
     int mStartMode;       // indicates how to behave if the service is killed
     IBinder mBinder;      // interface for clients that bind
