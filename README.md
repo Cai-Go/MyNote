@@ -4,9 +4,12 @@
 # 目录
 
 ## Android 
-1. [Android面试题整理](https://github.com/wuzhaohui026/MyNote/blob/master/Android/Android%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86.md)
-2. [Service小记](https://github.com/wuzhaohui026/MyNote/blob/master/Android/Service%E5%B0%8F%E8%AE%B0.md)
-3. [Androdi中的Theme](https://github.com/wuzhaohui026/MyNote/blob/master/Android/Android%E4%B8%AD%E7%9A%84Theme.md)
+### 笔记
+
+1. [Android面试题整理](https://github.com/wuzhaohui026/MyNote/blob/master/Android/%E7%AC%94%E8%AE%B0/Android%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86.md)
+2. [Service小记](https://github.com/wuzhaohui026/MyNote/blob/master/Android/%E7%AC%94%E8%AE%B0/Service%E5%B0%8F%E8%AE%B0.md)
+3. [Androdi中的Theme](https://github.com/wuzhaohui026/MyNote/blob/master/Android/%E7%AC%94%E8%AE%B0/Android%E4%B8%AD%E7%9A%84Theme.md)
+4. [Android 中常见的内存泄漏](https://github.com/wuzhaohui026/MyNote/blob/master/Android/%E7%AC%94%E8%AE%B0/Android%20%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.md)
 
 ### 《Android 进阶之光》读书笔记
 
