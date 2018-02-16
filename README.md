@@ -54,3 +54,8 @@
 13. [第16章 数组](https://github.com/wuzhaohui026/MyNote/blob/master/Java/%E3%80%8AJava%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E3%80%8B%E7%AC%94%E8%AE%B0/%E7%AC%AC16%E7%AB%A0%20%E6%95%B0%E7%BB%84.md)
 14. [第19章 枚举类型](https://github.com/wuzhaohui026/MyNote/blob/master/Java/%E3%80%8AJava%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E3%80%8B%E7%AC%94%E8%AE%B0/%E7%AC%AC19%E7%AB%A0%20%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B.md)
 15. [第20章 注解](https://github.com/wuzhaohui026/MyNote/blob/master/Java/%E3%80%8AJava%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E3%80%8B%E7%AC%94%E8%AE%B0/%E7%AC%AC20%E7%AB%A0%20%E6%B3%A8%E8%A7%A3.md)
+
+## 微信小程序笔记
+
+1. [JSON 配置](https://github.com/wuzhaohui026/MyNote/blob/master/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AC%94%E8%AE%B0/JSON%20%E9%85%8D%E7%BD%AE.md)
+
