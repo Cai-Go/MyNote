@@ -8,6 +8,7 @@
 ### RxJava 学习笔记
 
 1. [与RxJava 1.x的差异](https://github.com/wuzhaohui026/MyNote/blob/master/Android/RxJava%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%8ERxJava%201.x%E7%9A%84%E5%B7%AE%E5%BC%82.md)
+2. [RxJava 学习笔记2](https://github.com/wuzhaohui026/MyNote/blob/master/Android/RxJava%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/RxJava%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02.md)
 
 ### 笔记
 
