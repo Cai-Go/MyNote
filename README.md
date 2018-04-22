@@ -4,6 +4,11 @@
 # 目录
 
 ## Android 
+
+### RxJava 学习笔记
+
+1. [与RxJava 1.x的差异](https://github.com/wuzhaohui026/MyNote/blob/master/Android/RxJava%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%8ERxJava%201.x%E7%9A%84%E5%B7%AE%E5%BC%82.md)
+
 ### 笔记
 
 1. [Android面试题整理](https://github.com/wuzhaohui026/MyNote/blob/master/Android/%E7%AC%94%E8%AE%B0/Android%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86.md)
@@ -58,4 +63,3 @@
 ## 微信小程序笔记
 
 1. [JSON 配置](https://github.com/wuzhaohui026/MyNote/blob/master/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AC%94%E8%AE%B0/JSON%20%E9%85%8D%E7%BD%AE.md)
-
