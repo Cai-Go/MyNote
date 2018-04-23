@@ -1,4 +1,4 @@
-## RxJava 学习笔记2
+# RxJava 学习笔记2
 Observable : 被观察者。
 Observer : 观察者；有时也叫做 Subscriber、Watcher、Reactor。
 
