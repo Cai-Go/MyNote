@@ -5,6 +5,12 @@
 
 ## Android 
 
+
+### Android 动画学习笔记
+
+1. [Android动画之Tween Animation](https://github.com/wuzhaohui026/MyNote/blob/master/Android/Android%20%E5%8A%A8%E7%94%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Android%E5%8A%A8%E7%94%BB%E4%B9%8BTween%20Animation.md)
+2. [Android动画之Frame Animation](https://github.com/wuzhaohui026/MyNote/blob/master/Android/Android%20%E5%8A%A8%E7%94%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Android%E5%8A%A8%E7%94%BB%E4%B9%8BFrame%20Animation.md)
+
 ### RxJava 学习笔记
 
 1. [与RxJava 1.x的差异](https://github.com/wuzhaohui026/MyNote/blob/master/Android/RxJava%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%8ERxJava%201.x%E7%9A%84%E5%B7%AE%E5%BC%82.md)
