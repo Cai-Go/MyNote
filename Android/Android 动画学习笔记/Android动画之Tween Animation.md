@@ -1,4 +1,4 @@
-# Android动画之Tween Animation
+# Android 动画之 Tween Animation
 Tween动画是操作某个控件让其展现出旋转、渐变、移动、缩放的这么一种转换过程，我们成为补间动画。我们可以以XML形式定义动画，也可以编码实现。
 ## 以XML形式定义动画
 如果以XML形式定义一个动画，我们按照动画的定义语法完成XML，并放置于/res/anim目录下，文件名可以作为资源ID被引用；

@@ -1,4 +1,4 @@
-# Android动画之Frame Animation
+# Android 动画之 Frame Animation
 Frame动画是一系列图片按照一定的顺序展示的过程，和放电影的机制很相似，我们称为逐帧动画。Frame动画可以被定义在XML文件中，也可以完全编码实现。
 
 ## 被定义在XML文件中
