@@ -19,8 +19,8 @@
 xml 代码：
 ````xml
 	
-	<set 
-		android:ordering=["together" | "sequentially"]>
+<set 
+	android:ordering=["together" | "sequentially"]>
     <objectAnimator
         android:propertyName="string"
         android:duration="int"
