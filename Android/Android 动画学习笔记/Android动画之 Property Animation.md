@@ -118,3 +118,14 @@ valueType 的值有两种：
 ````
 ## 由编码实现
 如果完全由编码实现，我们需要用到 ObjectAnimator 对象。
+
+举个例子：
+
+以渐变效果为例：
+````java
+	ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f);
+    objectAnimator.setDuration(500);
+    objectAnimator.setRepeatCount(1);
+    objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+    objectAnimator.start();
+````
