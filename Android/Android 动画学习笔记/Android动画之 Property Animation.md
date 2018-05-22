@@ -118,14 +118,137 @@ valueType 的值有两种：
 ````
 ## 由编码实现
 如果完全由编码实现，我们需要用到 ObjectAnimator 对象。
-
+对于java代码实现，ObjectAnimator 提供了以下几个方法：ofFloat()，ofInt()，ofObject()，ofArgb()，ofPropertyValuesHolder()这几个方法都是设置动画作用的元素、作用的属性、动画开始、结束、以及中间的任意个属性值。
 举个例子：
 
 以渐变效果为例：
 ````java
+
 	ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f);
     objectAnimator.setDuration(500);
     objectAnimator.setRepeatCount(1);
     objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
     objectAnimator.start();
+````
+
+## 实现一个组合动画
+举例我们同时对一个控件进行宽高两个维度的缩放
+
+方式一：使用 AnimatorSet
+
+````xml
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+    <objectAnimator
+        android:duration="500"
+        android:propertyName="scaleX"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:valueFrom="1.0"
+        android:valueTo="1.5"
+        android:valueType="floatType" />
+    <objectAnimator
+        android:duration="500"
+        android:propertyName="scaleY"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:valueFrom="1.0"
+        android:valueTo="1.5"
+        android:valueType="floatType" />
+
+</set>
+````
+加载xml动画
+````java
+	  Animator anim = AnimatorInflater.loadAnimator(this, R.animator.animator_scale);
+      anim.setTarget(imageView);
+      anim.start();
+````
+纯Java代码实现：
+````java
+	AnimatorSet animatorSet = new AnimatorSet();
+
+    ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.5f);
+    scaleXAnimator.setDuration(500);
+    scaleXAnimator.setRepeatCount(1);
+    scaleXAnimator.setRepeatMode(ValueAnimator.REVERSE);
+    scaleXAnimator.start();
+
+    ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.5f);
+    scaleYAnimator.setDuration(500);
+    scaleYAnimator.setRepeatCount(1);
+    scaleYAnimator.setRepeatMode(ValueAnimator.REVERSE);
+
+    animatorSet.playTogether(scaleXAnimator, scaleYAnimator);
+    animatorSet.start();
+````
+上述代码通过playTogether函数实现两个动画同时执行，如果不想同时执行，也可以调用play函数返回AnimatorSet.Builder实例，AnimatorSet.Builder提供了如下几个函数用于实现动画组合：
+
+- after(Animator anim) 将现有动画插入到传入的动画之后执行
+- after(long delay) 将现有动画延迟指定毫秒后执行
+- before(Animator anim) 将现有动画插入到传入的动画之前执行
+- with(Animator anim) 将现有动画和传入的动画同时执行
+
+也可以调用playSequentially函数实现分布执行动画。
+
+
+方式二：使用PropertyValuesHolder
+
+````java
+	PropertyValuesHolder scaleXValuesHolder = PropertyValuesHolder.ofFloat("scaleX", 1.0f, 1.5f);
+	PropertyValuesHolder scaleYValuesHolder = PropertyValuesHolder.ofFloat("scaleY", 1.0f, 1.5f);
+	ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(imageView, scaleXValuesHolder, scaleYValuesHolder);
+    objectAnimator.setDuration(500);
+    objectAnimator.setRepeatCount(1);
+    objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+    objectAnimator.start();
+
+````
+通过这种方式只能实现同时执行的动画组合相比AnimatorSet就没那么丰富了，PropertyValuesHolder 提供的函数方法有如下几种：ofInt()、ofFloat()、ofObject()、ofKeyframe()。
+
+方式三：使用ViewPropertyAnimator
+````java
+	 ViewPropertyAnimator viewPropertyAnimator=imageView.animate();
+ 	 viewPropertyAnimator.scaleXBy(1.0f).scaleX(1.5f).scaleYBy(1.0f).scaleY(1.5f).setDuration(500).start();
+````
+多属性动画，作用于View，能够实现的动画相对单一，只能实现比如缩放，透明度改变，平移、旋转等，具体函数名字：平移 translationX，translationY, X，Y，缩放 scaleX，scaleY， 旋转 rotationX， rotationY，透明度 alpha
+
+
+## 设置动画监听器
+有时候我们可能要在某一个动画执行之前 或者动画结束之后进行一些其他的操作，这个时候就要借助动画监听器了。
+
+````java
+	objectAnimator.addListener(new Animator.AnimatorListener() {
+    @Override
+    public void onAnimationStart(Animator animation) {
+        //TODO 动画开始前的操作
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        //TODO 动画结束的操作
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+       //TODO 动画取消的操作
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+        //TODO 动画重复的操作
+    }
+    });
+````
+如果我们需要简单动画执行过程中的变化可以使用AnimatorUpdateListener
+````java
+	objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        float value = (float) animation.getAnimatedValue();
+        //可以根据自己的需要来获取动画更新值。
+        Log.e("AnimatorUpdateListener", "the animation value is " + value);
+    }
+    });
 ````
