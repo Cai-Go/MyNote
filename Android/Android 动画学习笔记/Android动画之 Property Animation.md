@@ -123,6 +123,7 @@ valueType 的值有两种：
 
 以渐变效果为例：
 ````java
+
 	ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f);
     objectAnimator.setDuration(500);
     objectAnimator.setRepeatCount(1);
