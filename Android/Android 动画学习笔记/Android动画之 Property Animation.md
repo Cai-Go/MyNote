@@ -90,7 +90,7 @@ valueType 的值有两种：
  
 举个例子
 ````xml
-	<set android:ordering="sequentially">
+<set android:ordering="sequentially">
     <set>
         <objectAnimator
             android:propertyName="x"
@@ -107,7 +107,7 @@ valueType 的值有两种：
         android:propertyName="alpha"
         android:duration="500"
         android:valueTo="1f"/>
-	</set>
+</set>
 ````
 为了执行该动画，必须在代码中将该动画资源文件填充为一个AnimationSet对象，然后在执行动画前，为目标对象设置所有的动画集合。
 简便的方法就是通过setTarget方法为目标对象设置动画集合，代码如下：
