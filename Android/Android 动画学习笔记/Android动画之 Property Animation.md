@@ -16,7 +16,11 @@
 
 ![](http://www.lightskystreet.com/img/propertyviewanalysis/12.png)
 
+## 被定义在XML文件中
+如果是被定义在 XML 中，需要注意是的属性动画文件存放目录为 res/animator，文件名可以作为资源 ID 在代码中引用，
+
 xml 代码：
+
 ````xml
 	
 <set 
@@ -46,7 +50,7 @@ xml 代码：
 ````
 **注意：** XML 文件的根元素必须为 <set\> 或者 <objectAnimator\>, or <valueAnimator\>。你也可以在一个 set 中放置不同的动画，来嵌套其他元素。
 
-## 元素介绍
+### 元素介绍
 动画集合节点，有个 ordering 属性，表示它的子动画启动方式是先后有序还是同时。
 
 |属性|说明|
@@ -54,7 +58,7 @@ xml 代码：
 |sequentially|动画按照先后顺序|
 |together(default)|动画同时启动|
 
-## <objectAnimator\>
+### <objectAnimator\>
 属性：
 
 - android:propertyName：String类型，必须要设定的值，代表要执行动画的属性，通过名字引用，比如你可以指定了一个View的”alpha” 或者 backgroundColor”，这个objectAnimator元素没有暴露target属性，因此比不能够在XML中执行一个动画，必须通过调用loadAnimator() 填充你的XML动画资源，并且调用setTarget() 应用到拥有这个属性的目标对象上。
@@ -68,7 +72,7 @@ xml 代码：
 - android:valueType：关键参数，如果该value是一个颜色，那么就不需要指定，因为动画框架会自动的处理颜色值。
 有intType和floatType两种：分别说明动画值为int和float型。
 
-## <animator\>
+### <animator\>
 在一个特定的时间里执行一个动画。相对应的是 ValueAnimator 所有的属性和一样
 
 - android:valueTo
@@ -112,3 +116,5 @@ valueType 的值有两种：
 	set.setTarget(myObject);
 	set.start();
 ````
+## 由编码实现
+如果完全由编码实现，我们需要用到 ObjectAnimator 对象。
