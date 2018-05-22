@@ -18,9 +18,9 @@
 
 xml 代码：
 ````xml
-	<set
-  		android:ordering=["together" | "sequentially"]>
-
+	
+	<set 
+		android:ordering=["together" | "sequentially"]>
     <objectAnimator
         android:propertyName="string"
         android:duration="int"
@@ -30,7 +30,6 @@ xml 代码：
         android:repeatCount="int"
         android:repeatMode=["repeat" | "reverse"]
         android:valueType=["intType" | "floatType"]/>
-
     <animator
         android:duration="int"
         android:valueFrom="float | int | color"
