@@ -117,7 +117,7 @@ valueType 的值有两种：
 	set.start();
 ````
 ## 由编码实现
-如果完全由编码实现，我们需要用到 ObjectAnimator 对象。
+### ObjectAnimator 对象
 对于java代码实现，ObjectAnimator 提供了以下几个方法：ofFloat()，ofInt()，ofObject()，ofArgb()，ofPropertyValuesHolder()这几个方法都是设置动画作用的元素、作用的属性、动画开始、结束、以及中间的任意个属性值。
 举个例子：
 
@@ -130,6 +130,25 @@ valueType 的值有两种：
     objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
     objectAnimator.start();
 ````
+
+### ValueAnimator（差值动画）
+ValueAnimator是ObjectAnimator的父类，它继承自抽象类Animator，它作用于一个值，将其由一个值变化为另外一个值，然后根据值的变化，按照一定的规则，动态修改View的属性，比如View的位置、透明度、旋转角度、大小等，即可完成了动画的效果。
+
+示例：
+````java
+	ValueAnimator valueAnimator =ValueAnimator.ofFloat( 0f, 126512.36f);
+	valueAnimator.setDuration(2000);
+	valueAnimator.setInterpolator(new LinearInterpolator());
+	valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    	@Override
+    	public void onAnimationUpdate(ValueAnimator animation) {
+    	float money= (float) animation.getAnimatedValue();
+    	mTextView.setText(String.format("%.2f", money));
+    	}
+	});
+	valueAnimator.start();
+````
+这里通过ofFloat()方法构造一个ValueAnimator实例，除此之外还提供了其他函数ofInt()、ofObject()、ofPropertyValuesHolder()函数，api 21之后又提供了ofArgb()，每个函数都是可以传入多个改变值。
 
 ## 实现一个组合动画
 举例我们同时对一个控件进行宽高两个维度的缩放
